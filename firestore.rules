@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // WARNING: This allows anyone to read/write. 
+    // Since Firebase Auth is removed per user request to bypass OTP, 
+    // security relies entirely on client-side logic.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
