@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CapitalFlow | Premium EMI Dashboard</title>
+  
+  <!-- Font Integrations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- App Wrapper with animated ambient blur nodes in the background -->
+  <div class="ambient-glow bg-blur-1"></div>
+  <div class="ambient-glow bg-blur-2"></div>
+  <div class="ambient-glow bg-blur-3"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text" id="loader-text">Initializing CapitalFlow...</p>
+    </div>
+  </div>
+
+  <div id="app" class="app-container">
+    
+    <!-- ==================== LOGIN VIEW ==================== -->
+    <section id="login-view" class="view-section active">
+      <div class="login-card-wrapper">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="brand-logo">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <h1 class="brand-name">CapitalFlow</h1>
+            <p class="brand-subtitle">Secure Installment & EMI Portal</p>
+          </div>
+          
+          <!-- Username/Password Login Form -->
+          <form id="login-form">
+            <div class="input-field-group">
+              <label for="login-username" class="input-label">Username (Name)</label>
+              <div class="input-wrapper">
+                <input type="text" id="login-username" placeholder="Enter your full name" required autocomplete="username">
+              </div>
+            </div>
+
+            <div class="input-field-group">
+              <label for="login-password" class="input-label">Password (Mobile Number)</label>
+              <div class="input-wrapper">
+                <input type="password" id="login-password" placeholder="Enter your 10-digit mobile number" required autocomplete="current-password">
+              </div>
+            </div>
+
+            <div id="login-error-msg" class="error-banner hidden">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span id="error-text">Invalid credentials.</span>
+            </div>
+
+            <button type="submit" id="login-btn" class="btn-primary submit-btn">
+              <span>Login securely</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD VIEW ==================== -->
+    <section id="dashboard-view" class="view-section">
+      
+      <!-- Top Navigation -->
+      <header class="dashboard-header">
+        <div class="header-logo-section">
+          <div class="brand-logo-small">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="header-title">CapitalFlow</span>
+            <span class="header-tagline">Premium EMI Center</span>
+          </div>
+        </div>
+
+        <!-- Center: Client Selector Panel (Admin Only) -->
+        <div class="admin-only-element header-client-selector-card">
+          <div class="client-dropdown-wrapper">
+            <label for="header-client-select">Viewing Client:</label>
+            <select id="header-client-select" class="admin-select-client-dropdown">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Right: Profile / Logout -->
+        <div class="header-user-profile">
+          <div class="user-meta">
+            <span class="user-name" id="display-user-name">User</span>
+            <span class="user-role-badge" id="display-role-badge">Client</span>
+          </div>
+          <button id="logout-btn" class="btn-logout" title="Log Out">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Layout -->
+      <main class="dashboard-grid">
+        
+        <!-- Left: Summary Analytics Cards -->
+        <aside class="dashboard-sidebar">
+          
+          <!-- Admin Client Directory Control Card (Only visible to Admin) -->
+          <div class="panel-card admin-directory-card admin-only-element">
+            <div class="card-bg-gradient"></div>
+            <div class="admin-directory-header">
+              <div class="stat-icon-wrapper admin-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div>
+                <span class="stat-label">Client Registry</span>
+                <span class="stat-subtext" id="admin-total-clients-label">0 Clients Registered</span>
+              </div>
+            </div>
+            <div class="admin-action-buttons">
+              <button id="admin-btn-add-client" class="btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Client</span>
+              </button>
+              <button id="admin-btn-edit-client" class="btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>Edit Profile</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Principal Card with SVG Progress Ring -->
+          <div class="panel-card principal-ring-card">
+            <div class="card-bg-gradient"></div>
+            <div class="progress-ring-container">
+              <svg class="progress-ring-svg" viewBox="0 0 200 200">
+                <defs>
+                  <linearGradient id="ring-gradient-success" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10b981" />
+                    <stop offset="100%" stop-color="#059669" />
+                  </linearGradient>
+                  <linearGradient id="ring-gradient-pending" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8b5cf6" />
+                    <stop offset="100%" stop-color="#6366f1" />
+                  </linearGradient>
+                  <linearGradient id="ring-track-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.03)" />
+                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.07)" />
+                  </linearGradient>
+                </defs>
+                <circle class="progress-ring-track" cx="100" cy="100" r="85" stroke="url(#ring-track-gradient)"></circle>
+                <circle class="progress-ring-indicator" id="progress-indicator-circle" cx="100" cy="100" r="85"></circle>
+              </svg>
+              
+              <div class="progress-ring-text">
+                <span class="label">REAL PRINCIPAL</span>
+                <span class="value principal-amount-text" id="stat-real-principal">₹0</span>
+                <span class="percentage" id="stat-percentage-text">0% Paid</span>
+              </div>
+            </div>
+            
+            <div class="principal-meta-grid">
+              <div class="meta-item">
+                <span class="meta-label">Total Payable</span>
+                <span class="meta-val highlight" id="stat-total-payable">₹0</span>
+              </div>
+              <div class="meta-divider"></div>
+              <div class="meta-item">
+                <span class="meta-label">Total Paid</span>
+                <span class="meta-val text-success" id="stat-total-paid">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Outstanding Balance Summary Card -->
+          <div class="panel-card stat-detail-card glow-card">
+            <div class="stat-icon-wrapper outstanding-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Outstanding Balance</span>
+              <span class="stat-value text-glow-indigo" id="stat-outstanding">₹0</span>
+              <span class="stat-subtext" id="stat-outstanding-percentage">—</span>
+            </div>
+          </div>
+
+          <!-- Remaining EMIs Card -->
+          <div class="panel-card stat-detail-card">
+            <div class="stat-icon-wrapper emi-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Remaining Installments</span>
+              <div class="emi-progress-header">
+                <span class="stat-value" id="stat-remaining-count">— / 10</span>
+                <span class="stat-subtext">Remaining EMIs</span>
+              </div>
+              <div class="card-progress-bar-container">
+                <div class="card-progress-bar" id="stat-emi-progress-bar" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right: Interactive 10 EMI Slots Scheduler -->
+        <section class="dashboard-main-content">
+          <div class="panel-card emi-scheduler-card">
+            <div class="scheduler-header">
+              <div class="title-area">
+                <h2 id="scheduler-client-title">Installment Schedule</h2>
+                <p>Track, audit, and modify individual weekly EMI payment statuses and schedules</p>
+              </div>
+              <div class="scheduler-summary-badges">
+                <span class="summary-badge paid">
+                  <span class="badge-dot"></span>
+                  <span id="badge-count-paid">0</span> Paid
+                </span>
+                <span class="summary-badge pending">
+                  <span class="badge-dot"></span>
+                  <span id="badge-count-pending">0</span> Pending
+                </span>
+                <span class="summary-badge overdue">
+                  <span class="badge-dot"></span>
+                  <span id="badge-count-overdue">0</span> Overdue
+                </span>
+              </div>
+            </div>
+
+            <!-- List Grid of 10 EMI Slots -->
+            <div class="emi-list-wrapper">
+              <div class="emi-list-header">
+                <div class="col-num">#</div>
+                <div class="col-amount">EMI Amount</div>
+                <div class="col-date">Date of Payment</div>
+                <div class="col-status">Status</div>
+                <div class="col-actions admin-only-element">Actions</div>
+              </div>
+              <div id="emi-list-container" class="emi-list-body">
+                <!-- Dynamically populated via app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <!-- ==================== MODALS (Admin Only) ==================== -->
+  
+  <!-- Add Client Modal -->
+  <div id="modal-add-client" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Register New Client</h3>
+        <button class="btn-modal-close" data-target="modal-add-client">&times;</button>
+      </div>
+      <form id="add-client-form" class="modal-form">
+        <div class="input-field-group">
+          <label for="new-client-name" class="input-label">Client Full Name</label>
+          <input type="text" id="new-client-name" placeholder="e.g. Rahul Kumar" required>
+        </div>
+        
+        <div class="input-field-group">
+          <label for="new-client-phone" class="input-label">Client Phone Number</label>
+          <div class="input-wrapper phone-input-wrapper">
+            <span class="country-code">+91</span>
+            <input type="tel" id="new-client-phone" placeholder="10-digit number" maxlength="10" pattern="[0-9]{10}" required>
+          </div>
+        </div>
+
+        <div class="input-field-group">
+          <label class="input-label">Loan Principal Plan</label>
+          <div class="plan-radio-group">
+            <input type="radio" id="new-plan-5000" name="new-client-plan" value="5000" checked>
+            <label for="new-plan-5000" class="plan-radio-btn">
+              <span class="plan-val">₹5,000</span>
+              <span class="plan-sub">10x ₹600 (₹6k total)</span>
+            </label>
+            
+            <input type="radio" id="new-plan-10000" name="new-client-plan" value="10000">
+            <label for="new-plan-10000" class="plan-radio-btn">
+              <span class="plan-val">₹10,000</span>
+              <span class="plan-sub">10x ₹1,200 (₹12k total)</span>
+            </label>
+            
+            <input type="radio" id="new-plan-15000" name="new-client-plan" value="15000">
+            <label for="new-plan-15000" class="plan-radio-btn">
+              <span class="plan-val">₹15,000</span>
+              <span class="plan-sub">10x ₹1,800 (₹18k total)</span>
+            </label>
+            
+            <input type="radio" id="new-plan-20000" name="new-client-plan" value="20000">
+            <label for="new-plan-20000" class="plan-radio-btn">
+              <span class="plan-val">₹20,000</span>
+              <span class="plan-sub">10x ₹2,400 (₹24k total)</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Register & Create Schedule</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Client Modal -->
+  <div id="modal-edit-client" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Client Details</h3>
+        <button class="btn-modal-close" data-target="modal-edit-client">&times;</button>
+      </div>
+      <form id="edit-client-form" class="modal-form">
+        <input type="hidden" id="edit-client-id">
+        
+        <div class="input-field-group">
+          <label for="edit-client-name" class="input-label">Client Name</label>
+          <input type="text" id="edit-client-name" required>
+        </div>
+        
+        <div class="input-field-group">
+          <label for="edit-client-phone" class="input-label">Client Phone</label>
+          <div class="input-wrapper phone-input-wrapper">
+            <span class="country-code">+91</span>
+            <input type="tel" id="edit-client-phone" maxlength="10" pattern="[0-9]{10}" required>
+          </div>
+        </div>
+
+        <div class="input-field-group">
+          <label class="input-label">Loan Principal Plan</label>
+          <div class="plan-radio-group">
+            <input type="radio" id="edit-plan-5000" name="edit-client-plan" value="5000">
+            <label for="edit-plan-5000" class="plan-radio-btn">
+              <span class="plan-val">₹5,000</span>
+              <span class="plan-sub">10x ₹600 (₹6k total)</span>
+            </label>
+            
+            <input type="radio" id="edit-plan-10000" name="edit-client-plan" value="10000">
+            <label for="edit-plan-10000" class="plan-radio-btn">
+              <span class="plan-val">₹10,000</span>
+              <span class="plan-sub">10x ₹1,200 (₹12k total)</span>
+            </label>
+            
+            <input type="radio" id="edit-plan-15000" name="edit-client-plan" value="15000">
+            <label for="edit-plan-15000" class="plan-radio-btn">
+              <span class="plan-val">₹15,000</span>
+              <span class="plan-sub">10x ₹1,800 (₹18k total)</span>
+            </label>
+            
+            <input type="radio" id="edit-plan-20000" name="edit-client-plan" value="20000">
+            <label for="edit-plan-20000" class="plan-radio-btn">
+              <span class="plan-val">₹20,000</span>
+              <span class="plan-sub">10x ₹2,400 (₹24k total)</span>
+            </label>
+          </div>
+          <p class="warning-alert-text">
+            ⚠️ Changing the plan will regenerate and reset all 10 EMI statuses to Pending.
+          </p>
+        </div>
+
+        <div class="modal-action-row">
+          <button type="button" id="admin-btn-delete-client" class="btn-danger">Delete Client</button>
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Celebratory Confetti Success Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Firebase SDK (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
